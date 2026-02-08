@@ -1,0 +1,15 @@
+{
+  "name": "tg-card-game",
+  "version": "1.0.0",
+  "description": "Telegram Mini App - Card game score tracker",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "bot": "node bot.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}

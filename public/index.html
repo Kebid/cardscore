@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Card Score</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Setup phase -->
+    <section id="setup-screen" class="screen">
+      <header class="header">
+        <h1>💸 Card Score</h1>
+        <p class="subtitle">Tap the winner each round</p>
+      </header>
+
+      <div class="form-card">
+        <label for="num-players">Number of players</label>
+        <input type="number" id="num-players" min="2" max="16" value="4">
+
+        <label for="bet">Bet / score per round</label>
+        <input type="number" id="bet" min="1" value="1">
+
+        <label>Player names</label>
+        <div class="name-mode">
+          <button type="button" id="btn-manual" class="mode-btn active">Manual</button>
+          <button type="button" id="btn-auto" class="mode-btn">Movie characters</button>
+        </div>
+        <div id="names-container">
+          <!-- Filled by JS: inputs for manual or read-only for auto -->
+        </div>
+        <button type="button" id="btn-start" class="btn btn-primary">Start game</button>
+      </div>
+    </section>
+
+    <!-- Playing phase: tap winner -->
+    <section id="play-screen" class="screen hidden">
+      <header class="header compact">
+        <h1>🏆 Who won?</h1>
+        <p class="bet-display">Bet: <strong id="current-bet">1</strong> per round</p>
+      </header>
+
+      <div id="player-cards" class="player-cards">
+        <!-- Player cards injected by app.js -->
+      </div>
+
+      <div class="scoreboard-section">
+        <h2>👑 Scoreboard</h2>
+        <ul id="scoreboard" class="scoreboard">
+          <!-- Sorted by score, filled by JS -->
+        </ul>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="btn-rotate" class="btn btn-secondary">Player in/out</button>
+        <div class="action-row">
+          <button type="button" id="btn-clear" class="btn btn-secondary btn-small">Clear scores</button>
+          <button type="button" id="btn-back" class="btn btn-secondary btn-small">Back / Restart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rotation modal: leave/join -->
+    <div id="rotate-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Player rotation</h2>
+        <p>One player leaves, optional new player joins. Scores are kept.</p>
+        <label>Who is leaving?</label>
+        <select id="rotate-leave">
+          <option value="">— Select —</option>
+        </select>
+        <label>New player name (optional)</label>
+        <input type="text" id="rotate-join" placeholder="Name">
+        <div class="modal-buttons">
+          <button type="button" id="btn-rotate-cancel" class="btn btn-secondary">Cancel</button>
+          <button type="button" id="btn-rotate-apply" class="btn btn-primary">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
