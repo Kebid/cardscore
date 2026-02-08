@@ -21,29 +21,19 @@ node bot.js
 - **Server:** http://localhost:3000 (serve the app and API).
 - **Bot:** `/start` → button opens the web app URL (set `WEBAPP_URL` to your deployed or tunnelled URL).
 
-## Deploy to Fly.io
+## Deploy to Railway
 
-1. Install [flyctl](https://fly.io/docs/hands-on/install-flyctl/) and log in: `fly auth login`.
+1. Push your code to GitHub (e.g. [Kebid/cardscore](https://github.com/Kebid/cardscore)).
 
-2. From the project directory:
-   ```bash
-   fly launch --no-deploy
-   ```
-   Use the app name `cardscore` (or pick one); don’t add a Postgres or Redis.
+2. Go to [railway.app](https://railway.app), sign in, and **New Project** → **Deploy from GitHub repo** → select `cardscore`.
 
-3. Set secrets (replace with your values):
-   ```bash
-   fly secrets set TELEGRAM_BOT_TOKEN=your_bot_token
-   fly secrets set WEBAPP_URL=https://cardscore.fly.dev
-   ```
-   Use your actual Fly app URL if the name is different (e.g. `https://your-app-name.fly.dev`).
+3. In the project, open your service → **Variables** and add:
+   - `TELEGRAM_BOT_TOKEN` = your bot token
+   - `WEBAPP_URL` = your app URL (Railway will give you a URL like `https://cardscore-production-xxxx.up.railway.app` — set this after the first deploy, then redeploy if needed)
 
-4. Deploy:
-   ```bash
-   fly deploy
-   ```
+4. Railway will build from the **Dockerfile** and run the app. The web server uses `PORT` automatically.
 
-5. Open the app: `https://cardscore.fly.dev` (or your app URL). In Telegram, set the bot’s Mini App URL to this in BotFather if needed.
+5. Under **Settings** → **Networking** → **Generate domain** to get a public URL. Use that URL as `WEBAPP_URL` and in Telegram for the Mini App.
 
 ## Game rules
 
