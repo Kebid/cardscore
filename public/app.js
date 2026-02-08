@@ -213,21 +213,22 @@
       const inputs = namesContainer.querySelectorAll('input');
       names = Array.from(inputs).slice(0, num).map((inp, i) => inp.value.trim() || `Player ${i + 1}`);
     } else {
-      // Fetch movie character names from server
-      names = [];
+      // Fetch movie character names from server (must be before static to hit API)
       api('/api/names?count=' + num)
-        .then(arr => {
-          names = arr;
+        .then(function (arr) {
+          var names = Array.isArray(arr) ? arr : [];
           return api('/api/game/setup', {
             method: 'POST',
-            body: { numPlayers: num, bet, playerNames: names }
+            body: { numPlayers: num, bet: bet, playerNames: names }
           });
         })
-        .then(s => {
+        .then(function (s) {
           state = s;
           render();
         })
-        .catch(err => alert('Error: ' + err.message));
+        .catch(function (err) {
+          alert('Movie names failed: ' + (err && err.message ? err.message : String(err)));
+        });
       return;
     }
     api('/api/game/setup', { method: 'POST', body: { numPlayers: num, bet, playerNames: names } })

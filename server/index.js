@@ -10,8 +10,6 @@ const game = require('./game');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Static files (Mini App)
-app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use(express.json());
 
 // Session from header (Telegram Mini App can send init data; for now we use a simple header or default)
@@ -19,7 +17,13 @@ function getSessionId(req) {
   return req.headers['x-session-id'] || req.query.sessionId || 'default';
 }
 
-// --- Game API (web app calls these) ---
+// --- Game API (before static so /api/* is never served as files) ---
+
+// Get movie character names first (no session dependency)
+app.get('/api/names', (req, res) => {
+  const count = Math.min(Math.max(2, parseInt(req.query.count, 10) || 4), 16);
+  res.json(game.getMovieCharacterNames(count));
+});
 
 // Get current game state
 app.get('/api/game', (req, res) => {
@@ -64,13 +68,8 @@ app.post('/api/game/clear', (req, res) => {
   res.json(state);
 });
 
-// Get movie character names for auto-assign. Query: ?count=4
-app.get('/api/names', (req, res) => {
-  const count = Math.min(parseInt(req.query.count, 10) || 4, 16);
-  res.json(game.getMovieCharacterNames(count));
-});
-
-// SPA fallback: serve index.html for non-api GET routes
+// Static files (Mini App) and SPA fallback
+app.use(express.static(path.join(__dirname, '..', 'public')));
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) return res.status(404).json({ error: 'Not found' });
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
